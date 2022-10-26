@@ -4,5 +4,16 @@ public enum MoveDirection {
     FORWARD,
     BACKWARD,
     RIGHT,
-    LEFT
+    LEFT;
+
+    public String toString() {
+        return switch (this) {
+            case FORWARD -> "Ruch = przód";
+            case BACKWARD -> "Ruch = tył";
+            case RIGHT -> "Ruch = prawo";
+            case LEFT -> "Ruch = lewo";
+        };
+    }
 }
+
+
