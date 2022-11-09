@@ -46,5 +46,11 @@ public class Vector2d {
         return new Vector2d(-x, -y);
     }
 
+    public int x() {
+        return x;
+    }
 
+    public int y() {
+        return y;
+    }
 }

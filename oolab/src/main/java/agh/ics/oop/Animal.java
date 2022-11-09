@@ -3,16 +3,38 @@ package agh.ics.oop;
 public class Animal {
 
     private MapDirection direction;
-    private Vector2d location;
+    public Vector2d location;
+    private final IWorldMap map;
 
-    public Animal() {
+    public Animal(IWorldMap map) {
         direction = MapDirection.NORTH;
         location = new Vector2d(2, 2);
+        this.map = map;
+    }
+
+    public Animal(IWorldMap map, Vector2d startPosition) {
+        direction = MapDirection.NORTH;
+        location = startPosition;
+        this.map = map;
     }
 
     @Override
     public String toString() {
-        return "orientacja = " + direction + ", pozycja = " + location;
+        switch (this.direction) {
+            case NORTH -> {
+                return "N";
+            }
+            case EAST -> {
+                return "E";
+            }
+            case WEST -> {
+                return "W";
+            }
+            case SOUTH -> {
+                return "S";
+            }
+        }
+        return null;
     }
 
     public boolean isAt(Vector2d position) {
@@ -20,14 +42,16 @@ public class Animal {
     }
 
     public void move(MoveDirection direction) {
+        Vector2d newLocation = null;
         switch (direction) {
             case RIGHT -> this.direction = this.direction.next();
             case LEFT -> this.direction = this.direction.previous();
-            case FORWARD -> this.location = this.location.add(this.direction.toUnitVector());
-            case BACKWARD -> this.location = this.location.subtract(this.direction.toUnitVector());
+            case FORWARD -> newLocation = this.location.add(this.direction.toUnitVector());
+            case BACKWARD -> newLocation = this.location.subtract(this.direction.toUnitVector());
         }
-        this.location = this.location.lowerLeft(new Vector2d(4, 4));
-        this.location = this.location.upperRight(new Vector2d(0, 0));
+        if (newLocation != null) {
+            if (map.canMoveTo(newLocation)) this.location = newLocation;
+        }
     }
 
 

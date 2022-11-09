@@ -7,61 +7,29 @@ import static org.junit.jupiter.api.Assertions.*;
 class WorldTest {
 
     @Test
-    void mainTestForDirection() {
-        //given:
-        String[] args = {"right", "right", "l"};
-        OptionsParser parser = new OptionsParser();
-        MoveDirection[] moveDirections = parser.parse(args);
-        Animal cat = new Animal();
-        for (MoveDirection moveDirection : moveDirections) {
-            cat.move(moveDirection);
-        }
+    void test() {
+        int mapWidth = 10;
+        int mapHeight = 5;
 
-        assertEquals("orientacja = wschód, pozycja = (2,2)", cat.toString());
+        String[] args = {"f", "b", "r", "l", "f", "f", "r", "r", "f", "f", "f", "f", "f", "f", "f", "f", "f"};
+        MoveDirection[] directions = new OptionsParser().parse(args);
+        RectangularMap map = new RectangularMap(mapWidth, mapHeight);
+        Vector2d[] positions = {new Vector2d(2, 2), new Vector2d(3, 4)};
+        IEngine engine = new SimulationEngine(directions, map, positions);
+        engine.run();
+
+        String expected = " y\\x  0 1 2 3 4 5 6 7 8 910\n" +
+                "  6: -----------------------\n" +
+                "  5: | | | |N| | | | | | | |\n" +
+                "  4: | | | | | | | | | | | |\n" +
+                "  3: | | | | | | | | | | | |\n" +
+                "  2: | | | | | | | | | | | |\n" +
+                "  1: | | | | | | | | | | | |\n" +
+                "  0: | | |S| | | | | | | | |\n" +
+                " -1: -----------------------\n";
+        String actual = new MapVisualiser(map).draw(new Vector2d(0, 0), new Vector2d(mapWidth, mapHeight));
+
+        assertEquals(expected, actual);
     }
-
-    @Test
-    void mainTestForMoving() {
-        //given:
-        String[] args = {"f", "forward", "right", "b", "backward", "left", "b"};
-        OptionsParser parser = new OptionsParser();
-        MoveDirection[] moveDirections = parser.parse(args);
-        Animal cat = new Animal();
-        for (MoveDirection moveDirection : moveDirections) {
-            cat.move(moveDirection);
-        }
-
-        assertEquals("orientacja = północ, pozycja = (0,3)", cat.toString());
-    }
-
-
-    @Test
-    void mainTestMapLimits() {
-        //given:
-        String[] args = {"b", "backward", "b", "b", "backward", "left", "f", "forward", "f", "f", "b"};
-        OptionsParser parser = new OptionsParser();
-        MoveDirection[] moveDirections = parser.parse(args);
-        Animal cat = new Animal();
-        for (MoveDirection moveDirection : moveDirections) {
-            cat.move(moveDirection);
-        }
-
-        assertEquals("orientacja = zachód, pozycja = (1,0)", cat.toString());
-    }
-
-    @Test
-    void mainTestForInvalidInput() {
-        //given:
-        String[] args = {"b", "x", "b", "bbb", "left", "rz", "f", "ąśź", "v", "123", "b"};
-        OptionsParser parser = new OptionsParser();
-        MoveDirection[] moveDirections = parser.parse(args);
-        Animal cat = new Animal();
-        for (MoveDirection moveDirection : moveDirections) {
-            cat.move(moveDirection);
-        }
-
-        assertEquals("orientacja = zachód, pozycja = (2,0)", cat.toString());
-    }
-
 
 }
