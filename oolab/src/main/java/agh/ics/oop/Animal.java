@@ -3,7 +3,7 @@ package agh.ics.oop;
 public class Animal {
 
     private MapDirection direction;
-    public Vector2d location;
+    private Vector2d location;
     private final IWorldMap map;
 
     public Animal(IWorldMap map) {
@@ -16,6 +16,10 @@ public class Animal {
         direction = MapDirection.NORTH;
         location = startPosition;
         this.map = map;
+    }
+
+    public Vector2d location() {
+        return location;
     }
 
     @Override

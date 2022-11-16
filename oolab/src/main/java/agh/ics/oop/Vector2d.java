@@ -1,8 +1,8 @@
 package agh.ics.oop;
 
 public class Vector2d {
-    public final int x;
-    public final int y;
+    private final int x;
+    private final int y;
 
     public Vector2d(int x, int y) {
         this.x = x;
@@ -38,6 +38,10 @@ public class Vector2d {
     }
 
     public boolean equals(Object other) {
+        if (this == other)
+            return true;
+        if (!(other instanceof Vector2d))
+            return false;
         Vector2d o = (Vector2d) other;
         return x == o.x && y == o.y;
     }
