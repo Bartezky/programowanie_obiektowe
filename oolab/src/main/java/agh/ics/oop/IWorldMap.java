@@ -9,6 +9,7 @@ import java.util.List;
  * @author apohllo
  */
 public interface IWorldMap {
+
     /**
      * Indicate if any object can move to the given position.
      *
@@ -43,5 +44,5 @@ public interface IWorldMap {
      */
     Object objectAt(Vector2d position);
 
-    List<Animal> animals();
+    List<Animal> animalList();
 }

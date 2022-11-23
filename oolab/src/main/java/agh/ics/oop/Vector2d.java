@@ -1,5 +1,7 @@
 package agh.ics.oop;
 
+import java.util.Objects;
+
 public class Vector2d {
     private final int x;
     private final int y;
@@ -37,13 +39,17 @@ public class Vector2d {
         return new Vector2d(x - other.x, y - other.y);
     }
 
+    @Override
     public boolean equals(Object other) {
-        if (this == other)
-            return true;
-        if (!(other instanceof Vector2d))
-            return false;
+        if (this == other) return true;
+        if (!(other instanceof Vector2d)) return false;
         Vector2d o = (Vector2d) other;
         return x == o.x && y == o.y;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
     }
 
     public Vector2d opposite() {

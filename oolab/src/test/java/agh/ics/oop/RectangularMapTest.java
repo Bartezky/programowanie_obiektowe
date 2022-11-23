@@ -23,8 +23,15 @@ class RectangularMapTest {
         RectangularMap map = new RectangularMap(2, 3);
 
         assertTrue(map.place(new Animal(map, new Vector2d(0, 1))));
-        assertFalse(map.place(new Animal(map, new Vector2d(0, 1))));
-        assertFalse(map.place(new Animal(map, new Vector2d(3, 3))));
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            map.place(new Animal(map, new Vector2d(3, 3)));
+        });
+
+        String expectedMessage = "can't place at (3,3)";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
     }
 
     @Test

@@ -9,6 +9,7 @@ public class OptionsParser {
                     s.equals("r") || s.equals("right") ||
                     s.equals("b") || s.equals("backward") ||
                     s.equals("l") || s.equals("left")) counter++;
+            else throw new IllegalArgumentException(s + " is not legal move specification");
         }
         MoveDirection[] moveDirections = new MoveDirection[counter];
         int i = 0;

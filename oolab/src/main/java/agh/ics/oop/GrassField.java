@@ -2,14 +2,16 @@ package agh.ics.oop;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GrassField extends AbstractWorldMap {
 
-    private final Grass[] tufts;
+    private final Map<Vector2d, Grass> tufts;
 
     public GrassField(int numberOfTuft) {
         super();
-        tufts = new Grass[numberOfTuft];
+        tufts = new HashMap<>();
         randomTuft(numberOfTuft);
     }
 
@@ -21,17 +23,15 @@ public class GrassField extends AbstractWorldMap {
         Collections.shuffle(randNumbers);
         for (int i = 0; i < numberOfTuft; i++) {
             Vector2d randPosition = new Vector2d(randNumbers.get(i) / (limit), randNumbers.get(i) % limit);
-            tufts[i] = new Grass(randPosition);
+            tufts.put(randPosition, new Grass(randPosition));
         }
     }
 
     @Override
     public Object objectAt(Vector2d position) {
         Animal animal = animalAt(position);
-        if (animal != null)
-            return animal;
-        else
-            return tuftAt(position);
+        if (animal != null) return animal;
+        else return tuftAt(position);
     }
 
     @Override
@@ -40,26 +40,22 @@ public class GrassField extends AbstractWorldMap {
     }
 
     public Grass tuftAt(Vector2d position) {
-        for (Grass tuft : tufts) {
-            if (tuft.location().equals(position))
-                return tuft;
-        }
-        return null;
+        return tufts.get(position);
     }
 
     protected Vector2d[] getBorders() {
-        int left = animals.get(0).location().x();
-        int right = left;
-        int low = animals.get(0).location().y();
-        int up = low;
-        for (Animal animal : animals) {
+        int left = Integer.MAX_VALUE;
+        int right = Integer.MIN_VALUE;
+        int low = Integer.MAX_VALUE;
+        int up = Integer.MIN_VALUE;
+        for (Animal animal : animals.values()) {
             Vector2d location = animal.location();
             left = Math.min(left, location.x());
             right = Math.max(right, location.x());
             low = Math.min(low, location.y());
             up = Math.max(up, location.y());
         }
-        for (Grass tuft : tufts) {
+        for (Grass tuft : tufts.values()) {
             Vector2d location = tuft.location();
             left = Math.min(left, location.x());
             right = Math.max(right, location.x());

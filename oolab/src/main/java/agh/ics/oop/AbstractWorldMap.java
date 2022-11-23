@@ -1,24 +1,24 @@
 package agh.ics.oop;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public abstract class AbstractWorldMap implements IWorldMap {
+public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
 
-    public final List<Animal> animals;
+    public final List<Animal> animalList;
+    protected final Map<Vector2d, Animal> animals;
     protected final MapVisualiser mapVisualiser;
 
     protected AbstractWorldMap() {
-        animals = new ArrayList<>();
+        animals = new HashMap<>();
         mapVisualiser = new MapVisualiser(this);
+        animalList = new ArrayList<>();
     }
 
     public Animal animalAt(Vector2d position) {
-        for (Animal animal : animals) {
-            if (animal.location().equals(position))
-                return animal;
-        }
-        return null;
+        return animals.get(position);
     }
 
     @Override
@@ -30,16 +30,13 @@ public abstract class AbstractWorldMap implements IWorldMap {
     @Override
     public boolean place(Animal animal) {
         if (canMoveTo(animal.location())) {
-            animals.add(animal);
+            animals.put(animal.location(), animal);
+            animalList.add(animal);
+            animal.addObserver(this);
             return true;
-        }
-        return false;
+        } else throw new IllegalArgumentException("can't place at " + animal.location());
     }
 
-    @Override
-    public List<Animal> animals() {
-        return animals;
-    }
 
     protected abstract Vector2d[] getBorders();
 
@@ -48,4 +45,14 @@ public abstract class AbstractWorldMap implements IWorldMap {
         Vector2d[] borders = getBorders();
         return mapVisualiser.draw(borders[0], borders[1]);
     }
+
+    public void positionChanged(Vector2d oldPosition, Vector2d newPosition) {
+        Animal changedAnimal = animals.remove(oldPosition);
+        animals.put(newPosition, changedAnimal);
+    }
+
+    public List<Animal> animalList() {
+        return animalList;
+    }
+
 }
