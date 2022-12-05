@@ -1,8 +1,10 @@
 package agh.ics.oop;
 
+import java.util.List;
+
 public class OptionsParser {
 
-    public MoveDirection[] parse(String[] strings) {
+    public MoveDirection[] parse(List<String> strings) {
         int counter = 0;
         for (String s : strings) {
             if (s.equals("f") || s.equals("forward") ||

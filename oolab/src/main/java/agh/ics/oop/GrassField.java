@@ -11,6 +11,7 @@ public class GrassField extends AbstractWorldMap {
 
     public GrassField(int numberOfTuft) {
         super();
+        boundary = new MapBoundary(this);
         tufts = new HashMap<>();
         randomTuft(numberOfTuft);
     }
@@ -43,26 +44,15 @@ public class GrassField extends AbstractWorldMap {
         return tufts.get(position);
     }
 
-    protected Vector2d[] getBorders() {
-        int left = Integer.MAX_VALUE;
-        int right = Integer.MIN_VALUE;
-        int low = Integer.MAX_VALUE;
-        int up = Integer.MIN_VALUE;
-        for (Animal animal : animals.values()) {
-            Vector2d location = animal.location();
-            left = Math.min(left, location.x());
-            right = Math.max(right, location.x());
-            low = Math.min(low, location.y());
-            up = Math.max(up, location.y());
-        }
-        for (Grass tuft : tufts.values()) {
-            Vector2d location = tuft.location();
-            left = Math.min(left, location.x());
-            right = Math.max(right, location.x());
-            low = Math.min(low, location.y());
-            up = Math.max(up, location.y());
-        }
-        return new Vector2d[]{new Vector2d(left, low), new Vector2d(right, up)};
+    @Override
+    public boolean place(Animal animal) {
+        if (canMoveTo(animal.location())) {
+            animals.put(animal.location(), animal);
+            animalList.add(animal);
+            animal.addObserver(this);
+            animal.addObserver(boundary);
+            return true;
+        } else throw new IllegalArgumentException("can't place at " + animal.location());
     }
 
 }

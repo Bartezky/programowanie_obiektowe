@@ -7,6 +7,7 @@ public class RectangularMap extends AbstractWorldMap {
 
     public RectangularMap(int width, int height) {
         super();
+        boundary = new MapBoundary(this, 0, height, 0, width);
         this.width = width;
         this.height = height;
     }
@@ -22,8 +23,4 @@ public class RectangularMap extends AbstractWorldMap {
         return animalAt(position) == null;
     }
 
-    @Override
-    protected Vector2d[] getBorders() {
-        return new Vector2d[]{new Vector2d(0, 0), new Vector2d(width, height)};
-    }
 }

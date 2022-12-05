@@ -55,8 +55,9 @@ public class Animal {
         }
         if (newLocation != null) {
             if (map.canMoveTo(newLocation)) {
-                positionChanged(this.location, newLocation);
+                Vector2d oldLocation = new Vector2d(this.location.x(), this.location.y());
                 this.location = newLocation;
+                positionChanged(oldLocation, newLocation);
             }
         }
     }

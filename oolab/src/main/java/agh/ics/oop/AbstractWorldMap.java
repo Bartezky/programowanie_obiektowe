@@ -7,9 +7,10 @@ import java.util.Map;
 
 public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
 
-    public final List<Animal> animalList;
+    protected final List<Animal> animalList;
     protected final Map<Vector2d, Animal> animals;
     protected final MapVisualiser mapVisualiser;
+    protected MapBoundary boundary;
 
     protected AbstractWorldMap() {
         animals = new HashMap<>();
@@ -38,7 +39,9 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     }
 
 
-    protected abstract Vector2d[] getBorders();
+    public Vector2d[] getBorders() {
+        return new Vector2d[]{boundary.lowerLeft(), boundary.upperRight()};
+    }
 
     @Override
     public String toString() {
